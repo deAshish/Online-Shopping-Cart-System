@@ -1,0 +1,31 @@
+.general {
+  font-size: 18px;
+  border: double #32a1ce;
+  margin: 15px;
+  width: 20%;
+  display: inline-block;
+}
+
+.productForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.responseMessage {
+  color: red;
+  font-size: smaller;
+}
+
+.spacebutton {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.productimage {
+  width: 150px;
+  height: 130px;
+  align-items: center;
+}
