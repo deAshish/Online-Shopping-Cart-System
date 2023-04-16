@@ -1,15 +1,16 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.order.dto;
 
-import shoppingCart.shoppingCart.order.domain.Order;
+
+import miu.edu.pm.project.onlineshoppingcartsystem.order.domain.Orders;
 
 public class OrderAdapter {
-    public static Order orderFromDTO(OrderDTO orderDTO){
-        Order order = new Order(orderDTO.getTotalPrice());
-        return order;
+    public static Orders orderFromDTO(OrderDTO orderDTO){
+        Orders orders = new Orders(orderDTO.getTotalPrice());
+        return orders;
     }
 
-    public static OrderDTO oderDTOFromOrder(Order order){
-        OrderDTO orderDTO = new OrderDTO(order.getTotalPrice());
+    public static OrderDTO oderDTOFromOrder(Orders orders){
+        OrderDTO orderDTO = new OrderDTO(orders.getTotalPrice());
         return orderDTO;
     }
 }

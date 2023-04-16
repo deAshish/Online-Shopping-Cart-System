@@ -23,7 +23,8 @@ public class Customer {
 //    @Email
     String email;
     String phoneNumber;
-    Address address;
+    @Embedded
+    private Address address;
 
     @ManyToMany
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))

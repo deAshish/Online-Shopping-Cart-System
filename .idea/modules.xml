@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/Online-Shopping-Cart-System.iml" filepath="$PROJECT_DIR$/.idea/Online-Shopping-Cart-System.iml" />
       <module fileurl="file://$PROJECT_DIR$/Server/src/main/main.iml" filepath="$PROJECT_DIR$/Server/src/main/main.iml" />
       <module fileurl="file://$PROJECT_DIR$/Server/online-shopping-cart-system.iml" filepath="$PROJECT_DIR$/Server/online-shopping-cart-system.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Server/server.iml" filepath="$PROJECT_DIR$/Server/server.iml" />
       <module fileurl="file://$PROJECT_DIR$/Server/src/test/test.iml" filepath="$PROJECT_DIR$/Server/src/test/test.iml" />
     </modules>
   </component>
