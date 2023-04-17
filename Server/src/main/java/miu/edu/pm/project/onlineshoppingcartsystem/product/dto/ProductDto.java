@@ -1,13 +1,14 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.product.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDTO {
+@Getter
+@Setter
+public class ProductDto {
+    Long id;
     String name;
     Double price;
     int quantity;
