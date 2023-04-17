@@ -16,4 +16,5 @@ public class ProductCategory {
     @GeneratedValue
     Long id;
     String name;
+    String description;
 }

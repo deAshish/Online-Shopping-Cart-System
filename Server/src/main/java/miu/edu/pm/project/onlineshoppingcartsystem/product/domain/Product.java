@@ -17,10 +17,12 @@ public class Product {
     String name;
     Double price;
     int quantity;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     Customer customer;
-    @OneToOne
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     ProductCategory category;
 
