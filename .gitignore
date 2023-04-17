@@ -8,9 +8,12 @@
 # Log file
 *.log
 
-
+target/
+application.properties/
 .idea
 .DS_Store
+.idea/
+.DS_Store/
 
 # BlueJ files
 *.ctxt
