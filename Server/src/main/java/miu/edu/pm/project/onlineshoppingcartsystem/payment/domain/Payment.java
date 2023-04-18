@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import miu.edu.pm.project.onlineshoppingcartsystem.user.domain.Customer;
 import miu.edu.pm.project.onlineshoppingcartsystem.order.domain.Orders;
 
-
 import java.util.Date;
 
 @Entity

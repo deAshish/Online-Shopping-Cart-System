@@ -19,10 +19,7 @@ public class OrderLine {
     private Product product;
 
     private int quantity;
-
-//    @ManyToOne
-//    @JoinColumn(name = "order_id")
-//    private Orders orders;
+    
 
     @ManyToOne
     @JoinColumn(name = "order_id")
