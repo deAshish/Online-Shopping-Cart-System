@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import miu.edu.pm.project.onlineshoppingcartsystem.user.domain.Customer;
-import miu.edu.pm.project.onlineshoppingcartsystem.order.domain.Order;
 
 
 import java.util.Date;
