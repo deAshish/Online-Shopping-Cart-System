@@ -1,5 +1,6 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.product.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     ProductCategory category;
 
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // Ignore these properties during serialization
     public Product(String name, Double price, int quantity) {
         this.name = name;
         this.price = price;

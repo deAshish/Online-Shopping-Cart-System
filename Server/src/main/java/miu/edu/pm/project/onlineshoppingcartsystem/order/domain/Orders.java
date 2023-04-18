@@ -1,5 +1,6 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.order.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class Orders {
     @OneToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "payment_id")
     private Payment payment;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderLine> orderLines = new ArrayList<>();
 
