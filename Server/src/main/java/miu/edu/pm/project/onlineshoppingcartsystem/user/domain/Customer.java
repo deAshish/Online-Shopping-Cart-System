@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import miu.edu.pm.project.onlineshoppingcartsystem.user.model.Role;
 
 import java.util.Collection;
 
@@ -26,7 +27,7 @@ public class Customer {
     Address address;
 
     @ManyToMany
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleID"))
     private Collection<Role> roles;
 
     public Customer(Long id, String userName, String password, String email, String phoneNumber, Address address) {
