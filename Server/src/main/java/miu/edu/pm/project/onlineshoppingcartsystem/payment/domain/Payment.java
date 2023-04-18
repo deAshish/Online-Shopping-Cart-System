@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import miu.edu.pm.project.onlineshoppingcartsystem.user.domain.Customer;
-
+import miu.edu.pm.project.onlineshoppingcartsystem.order.domain.Orders;
 
 import java.util.Date;
 
@@ -21,7 +21,7 @@ public class Payment {
     Double amount;
     @OneToOne
     @JoinColumn(name = "order_id")
-    Order order;
+    Orders orders;
     @OneToOne
     @JoinColumn(name = "user_id")
     Customer customer;
