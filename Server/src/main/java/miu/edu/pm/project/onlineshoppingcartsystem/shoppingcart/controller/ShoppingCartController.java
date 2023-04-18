@@ -1,6 +1,7 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.controller;
 
 import lombok.RequiredArgsConstructor;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.domain.Product;
 import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.domain.CartItem;
 import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.dto.CartItemRequest;
 import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.service.ShoppingCartService;
@@ -22,8 +23,29 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/add")
-    public String addCartItem(@RequestBody CartItemRequest cartItemRequest) {
-        shoppingCartService.addProduct(cartItemRequest.getProduct(), cartItemRequest.getCustomer_id());
+    public String addToCart(@RequestBody CartItemRequest cartItemRequest) {
+        shoppingCartService.addProduct(cartItemRequest.getProduct(), cartItemRequest.getCustomerId());
         return "Successfully added";
     }
+
+    @PutMapping("/product{id}")
+    public String updateCartItem(@PathVariable Long id, @RequestBody CartItemRequest cartItemRequest) {
+        shoppingCartService.updateCartItem(id, cartItemRequest);
+        return "Successfully updated";
+    }
+
+    @DeleteMapping("/product{id}")
+    public String deleteCartItem(@PathVariable Product product) {
+        shoppingCartService.removeProduct(product);
+        return "Successfully deleted";
+    }
+
+//    @GetMapping("/total")
+//    public double getTotal() {
+//        return shoppingCartService.getTotal();
+//    }
+//    @PostMapping("/checkout")
+//    public void checkout() {
+//        shoppingCartService.checkout();
+//    }
 }

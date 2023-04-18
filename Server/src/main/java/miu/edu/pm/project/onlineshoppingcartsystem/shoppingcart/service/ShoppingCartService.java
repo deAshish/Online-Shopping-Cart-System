@@ -3,6 +3,7 @@ package miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.service;
 import miu.edu.pm.project.onlineshoppingcartsystem.product.domain.Product;
 import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.domain.CartItem;
 import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.domain.ShoppingCart;
+import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.dto.CartItemRequest;
 import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.repository.ShoppingCartRepo;
 import miu.edu.pm.project.onlineshoppingcartsystem.user.domain.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,5 +70,8 @@ public class ShoppingCartService {
                 break;
             }
         }
+    }
+
+    public void updateCartItem(Long id, CartItemRequest cartItemRequest) {
     }
 }
