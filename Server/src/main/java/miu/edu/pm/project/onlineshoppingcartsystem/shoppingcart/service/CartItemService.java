@@ -1,77 +1,67 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.service;
 
-import miu.edu.pm.project.onlineshoppingcartsystem.product.domain.Product;
-import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.domain.CartItem;
-import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.dto.CartItemRequest;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductDto;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.service.ProductService;
+import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.domain.CartItems;
 import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.repository.CartItemRepo;
 import miu.edu.pm.project.onlineshoppingcartsystem.user.domain.Customer;
+import miu.edu.pm.project.onlineshoppingcartsystem.user.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CartItemService {
+    @Autowired
+    private CartItemRepo cartItemRepo;
 
     @Autowired
-    CartItemRepo cartItemRepo;
+    private ProductService productService;
 
-    public void addProduct(Product product, Long customerId) {
-        Customer customer = null; //customerRepo.get(customerId); TODO find customer by id
-        CartItem cart = cartItemRepo.findByCustomer(customer);
+    @Autowired
+    private CustomerService customerService;
 
-        CartItem cartItem = null;
 
-        // find if it is already added to cart earlier
-        for (CartItem item : cart.getItems()) {
-            if (item.getProduct().getName().equals(product.getName())) {
-                cartItem = item;
-                break;
-            }
-        }
+    public List<CartItems> getCartItemsByUserId(Long userId) {
+        return cartItemRepo.findByCustomerId(userId);
+    }
 
-        // if cart item is not added to cart earlier, create new one and add it to cart
-        if (cartItem == null) {
-            cartItem = new CartItem();
+
+    public void addToCart(Long userId, Long productId, Integer quantity) {
+        Customer customer = customerService.getCustomerById(userId);
+        ProductDto product = productService.getProductById(productId);
+
+
+//            if (product == null) {
+//                throw new NotFoundException("Product not found");
+//            }
+
+
+        List<CartItems> cartItems = (List<CartItems>) cartItemRepo.findByCustomerIdAndProductId(userId, productId);
+        if (!cartItems.isEmpty()) {
+            CartItems cartItem = cartItems.get(0);
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+            cartItemRepo.save(cartItem);
+        } else {
+            CartItems cartItem = new CartItems();
+            cartItem.setCustomer(customer);
             cartItem.setProduct(product);
-            cart.getItems().add(cartItem);
-        }
-
-        // Increase quantity
-        cartItem.setQuantity(cartItem.getQuantity() + 1);
-    }
-
-    public List<CartItem> getShoppingCart(Long customerId) {
-        Customer customer = null; //customerRepo.get(customerId); TODO find customer by id
-        CartItem cart = cartItemRepo.findByCustomer(customer);
-        return cart.getItems();
-    }
-
-    public void updateProduct(Product product, int newQuantity) {
-        Customer customer = null; //customerRepo.get(customerId); TODO find customer by id
-        CartItem cart = cartItemRepo.findByCustomer(customer);
-
-        CartItem cartItem = null;
-        for (CartItem item : cart.getItems()) {
-            if (item.getProduct().equals(product)) {
-                item.setQuantity(newQuantity);
-                break;
-            }
+            cartItem.setQuantity(quantity);
+            cartItemRepo.save(cartItem);
         }
     }
 
-    public void removeProduct(Long id) {
-        List<CartItem> cartItems = new ArrayList<>();
-        for (int i = 0; i < cartItems.size(); i++) {
-            if (cartItems.get(i).getId() == id) {
-                cartItems.remove(i);
-                break;
-            }
-        }
+    public void removeFromCart(Long cartItemId) {
+        cartItemRepo.deleteById(cartItemId);
     }
 
-    public void updateCartItem(Long id, CartItemRequest cartItemRequest) {
+    public void updateCartItemQuantity(Long cartItemId, Integer quantity) {
+        CartItems cartItem = cartItemRepo.findById(cartItemId).get();
+//                .orElseThrow(() -> new NotFoundException("Cart item not found"));
 
+        cartItem.setQuantity(quantity);
+        cartItemRepo.save(cartItem);
     }
+}
 }
