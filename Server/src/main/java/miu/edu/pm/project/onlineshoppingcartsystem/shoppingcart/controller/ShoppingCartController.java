@@ -1,10 +1,9 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.controller;
 
 import lombok.RequiredArgsConstructor;
-import miu.edu.pm.project.onlineshoppingcartsystem.product.domain.Product;
 import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.domain.CartItem;
 import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.dto.CartItemRequest;
-import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.service.ShoppingCartService;
+import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.service.CartItemService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShoppingCartController {
 
-    private final ShoppingCartService shoppingCartService;
+    private final CartItemService shoppingCartService;
 
     @GetMapping()
     public List<CartItem> getCartItems() {
@@ -35,8 +34,8 @@ public class ShoppingCartController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCartItem(@PathVariable Product product) {
-        shoppingCartService.removeProduct(product);
+    public String deleteCartItem(@PathVariable Long id) {
+        shoppingCartService.removeProduct(id);
         return "Successfully deleted";
     }
 
