@@ -9,6 +9,7 @@ import { useState } from "react";
 import Product from "./Product/Product";
 import Orders from "./Order/Orders";
 import MyCart from "./Order/Mycart";
+import Register from "./Register/Register";
 
 function Dashboard() {
   let [user, setUser] = useState({
@@ -41,12 +42,16 @@ function Dashboard() {
 
   return (
     <div className="App">
+      <Register />
       <ul id="menu">
         <li>
           <Link to="/">Homepage</Link>
         </li>
         <li>
           <Link to="/login">Login</Link>
+        </li>
+        <li>
+          <Link to="/register">Register</Link>
         </li>
         <li>
           <Link to="/products">Products</Link>
