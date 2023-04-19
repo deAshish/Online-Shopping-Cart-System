@@ -28,13 +28,13 @@ public class ShoppingCartController {
         return "Successfully added";
     }
 
-    @PutMapping("/product{id}")
+    @PutMapping("/{id}")
     public String updateCartItem(@PathVariable Long id, @RequestBody CartItemRequest cartItemRequest) {
         shoppingCartService.updateCartItem(id, cartItemRequest);
         return "Successfully updated";
     }
 
-    @DeleteMapping("/product{id}")
+    @DeleteMapping("/{id}")
     public String deleteCartItem(@PathVariable Product product) {
         shoppingCartService.removeProduct(product);
         return "Successfully deleted";
