@@ -1,11 +1,12 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.product.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import miu.edu.pm.project.onlineshoppingcartsystem.user.domain.Customer;
+
+import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor
