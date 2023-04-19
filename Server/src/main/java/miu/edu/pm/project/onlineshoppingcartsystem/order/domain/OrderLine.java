@@ -1,10 +1,11 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.order.domain;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import miu.edu.pm.project.onlineshoppingcartsystem.product.domain.Product;
+
+import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor

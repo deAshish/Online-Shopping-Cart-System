@@ -1,13 +1,12 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.user.domain;
 
-import jakarta.persistence.*;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+
 //import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
