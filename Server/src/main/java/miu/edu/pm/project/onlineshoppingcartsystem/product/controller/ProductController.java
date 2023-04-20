@@ -1,5 +1,6 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.product.controller;
 
+import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.PageableResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,9 +55,15 @@ public class ProductController {
 
     // Get all products
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProducts() {
-        List<ProductDto> products = productService.getAllProducts();
-        return ResponseEntity.ok(products);
+    public ResponseEntity<PageableResponse<ProductDto>> getAll(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+
+    ) {
+        PageableResponse<ProductDto> pageableResponse = productService.getAllProducts(pageNumber, pageSize, sortBy, sortDir);
+        return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
     }
 
     // Delete a product by ID
@@ -67,9 +74,15 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ProductDto>> searchByName(@RequestParam("query") String query) {
-        List<ProductDto> products =  productService.searchProductByName(query);
-        return ResponseEntity.ok(products);
+    public ResponseEntity<PageableResponse<ProductDto>> searchByName(
+            @RequestParam("query") String query,
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+
+        PageableResponse<ProductDto> pageableResponse = productService.searchProductByName(query, pageNumber, pageSize, sortBy, sortDir);
+        return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
     }
 
 }
