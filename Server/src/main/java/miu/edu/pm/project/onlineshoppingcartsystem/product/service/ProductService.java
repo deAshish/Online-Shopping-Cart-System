@@ -4,6 +4,7 @@ package miu.edu.pm.project.onlineshoppingcartsystem.product.service;
 
 import java.util.List;
 
+import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.PageableResponse;
 import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductDto;
 
 public interface ProductService {
@@ -11,9 +12,10 @@ public interface ProductService {
     ProductDto updateProduct(Long productId, ProductDto productDto);
     void deleteProductById(Long productId);
     ProductDto getProductById(Long productId);
-    List<ProductDto> getAllProducts();
+    PageableResponse<ProductDto> getAllProducts(int pageNumber, int pageSize, String sortBy, String sortDir);
 
-    List<ProductDto> searchProductByName(String string);
+    PageableResponse<ProductDto> searchProductByName(String name, int pageNumber, int pageSize, String sortBy, String sortDir);
+
 }
 
 

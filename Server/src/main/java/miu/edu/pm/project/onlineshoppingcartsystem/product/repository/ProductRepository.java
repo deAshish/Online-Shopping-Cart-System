@@ -1,6 +1,7 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.product.repository;
 import miu.edu.pm.project.onlineshoppingcartsystem.product.domain.Product;
-import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -8,5 +9,5 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     // You can add custom repository methods here if needed
 
-    List<Product> findByNameContainingIgnoreCase(String name);
+    Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }

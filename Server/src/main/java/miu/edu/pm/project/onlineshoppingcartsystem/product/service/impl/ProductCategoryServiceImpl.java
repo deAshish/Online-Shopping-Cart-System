@@ -75,5 +75,13 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
                 .map(productCategory -> modelMapper.map(productCategory, ProductCategoryDto.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<ProductCategoryDto> searchProductCategoryByName(String string) {
+        List<ProductCategory> productCategories = productCategoryRepository.findByNameContainingIgnoreCase(string);
+        return productCategories.stream()
+                .map(productCategory -> modelMapper.map(productCategory, ProductCategoryDto.class))
+                .collect(Collectors.toList());
+    }
 }
 

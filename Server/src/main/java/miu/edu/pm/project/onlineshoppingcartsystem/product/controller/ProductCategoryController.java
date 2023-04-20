@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/productCategoryCategory")
+@RequestMapping("/productCategory")
 public class ProductCategoryController {
     @Autowired
     private ProductCategoryService productCategoryService;
@@ -64,6 +64,13 @@ public class ProductCategoryController {
     public ResponseEntity<Void> deleteProductCategoryById(@PathVariable("id") Long id) {
         productCategoryService.deleteProductCategoryById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductCategoryDto>> searchByName(@RequestParam("query") String query) {
+
+        List<ProductCategoryDto> productCategories =  productCategoryService.searchProductCategoryByName(query);
+        return ResponseEntity.ok(productCategories);
     }
 }
 
