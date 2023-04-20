@@ -13,7 +13,8 @@ public interface ProductService {
     ProductDto getProductById(Long productId);
     List<ProductDto> getAllProducts();
 
-    List<ProductDto> searchProductByName(String string);
+    List<ProductDto> searchProductByName(String name);
+
 }
 
 

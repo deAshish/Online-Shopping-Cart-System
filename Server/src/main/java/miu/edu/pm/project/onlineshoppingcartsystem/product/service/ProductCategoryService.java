@@ -4,6 +4,7 @@ package miu.edu.pm.project.onlineshoppingcartsystem.product.service;
 
 
 import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductCategoryDto;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductDto;
 
 
 import java.util.List;
@@ -16,6 +17,7 @@ public interface ProductCategoryService {
     ProductCategoryDto getProductCategoryById(Long productCategoryId);
     List<ProductCategoryDto> getAllProductCategories();
     List<ProductCategoryDto> searchProductCategoryByName(String string);
+
 }
 
 

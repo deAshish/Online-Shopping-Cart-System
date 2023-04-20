@@ -20,8 +20,6 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-
-
     @Autowired
     private ModelMapper modelMapper; // You can use a library like ModelMapper for mapping between entities and DTOs
 
@@ -82,5 +80,6 @@ public class ProductServiceImpl implements ProductService {
                 .map(product -> modelMapper.map(product, ProductDto.class))
                 .collect(Collectors.toList());
     }
+
 }
 

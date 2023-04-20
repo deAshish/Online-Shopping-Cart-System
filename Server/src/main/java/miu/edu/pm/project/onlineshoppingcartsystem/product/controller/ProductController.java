@@ -68,9 +68,9 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity<List<ProductDto>> searchByName(@RequestParam("query") String query) {
-
         List<ProductDto> products =  productService.searchProductByName(query);
         return ResponseEntity.ok(products);
     }
+
 }
 
