@@ -15,6 +15,7 @@ public interface ProductCategoryService {
     void deleteProductCategoryById(Long productCategoryId);
     ProductCategoryDto getProductCategoryById(Long productCategoryId);
     List<ProductCategoryDto> getAllProductCategories();
+    List<ProductCategoryDto> searchProductCategoryByName(String string);
 }
 
 
