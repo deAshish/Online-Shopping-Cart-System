@@ -20,8 +20,6 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-
-
     @Autowired
     private ModelMapper modelMapper; // You can use a library like ModelMapper for mapping between entities and DTOs
 
@@ -61,7 +59,6 @@ public class ProductServiceImpl implements ProductService {
         // Retrieve the Product entity from the repository
         Product product = productRepository.findById(productId)
                 .orElseThrow(ResourceNotFoundException::new);
-//                .orElseThrow(() -> new NotFoundException("Product not found with id: " + productId));
         // Map the Product entity to ProductDto and return
         return modelMapper.map(product, ProductDto.class);
     }
@@ -75,5 +72,14 @@ public class ProductServiceImpl implements ProductService {
                 .map(product -> modelMapper.map(product, ProductDto.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<ProductDto> searchProductByName(String string) {
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(string);
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductDto.class))
+                .collect(Collectors.toList());
+    }
+
 }
 
