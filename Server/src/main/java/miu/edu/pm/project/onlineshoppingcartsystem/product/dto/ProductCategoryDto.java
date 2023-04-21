@@ -11,5 +11,6 @@ public class ProductCategoryDto {
     Long id;
     String name;
     String description;
+    ProductDto productDto;
 
 }

@@ -1,7 +1,6 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.order.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +8,7 @@ import miu.edu.pm.project.onlineshoppingcartsystem.payment.domain.Payment;
 import miu.edu.pm.project.onlineshoppingcartsystem.product.domain.Product;
 import miu.edu.pm.project.onlineshoppingcartsystem.user.domain.Customer;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

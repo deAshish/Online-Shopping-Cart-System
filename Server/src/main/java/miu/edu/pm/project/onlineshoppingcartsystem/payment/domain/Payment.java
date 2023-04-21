@@ -1,12 +1,12 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.payment.domain;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import miu.edu.pm.project.onlineshoppingcartsystem.user.domain.Customer;
 import miu.edu.pm.project.onlineshoppingcartsystem.order.domain.Orders;
 
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
