@@ -21,27 +21,41 @@ public class Orders {
     @GeneratedValue
     Long id;
     Double totalPrice;
+    OrderStatus status;
     @OneToOne
     @JoinColumn(name = "user_id")
 
     Customer customer;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "payment_id")
-    private Payment payment;
+//    @OneToOne(cascade = CascadeType.ALL, optional = false)
+//    @JoinColumn(name = "payment_id")
+//    private Payment payment;
     @JsonIgnore
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderLine> orderLines = new ArrayList<>();
 
-    public Orders(Double totalPrice) {
+    public Orders(Customer customer,Double totalPrice) {
+        this.customer = customer;
         this.totalPrice = totalPrice;
     }
 
-    public Orders(Customer customer, Payment payment, List<OrderLine> orderLines) {
+//    public Orders(Customer customer, Payment payment, List<OrderLine> orderLines) {
+//        this.customer = customer;
+//        this.payment = payment;
+//        this.orderLines = orderLines;
+//    }
+
+    public Orders(Customer customer, List<OrderLine> orderLines) {
         this.customer = customer;
-        this.payment = payment;
+//        this.payment = payment;
         this.orderLines = orderLines;
     }
+
+//    public Orders(Customer customer, double totalPrice, Payment payment) {
+//        this.customer = customer;
+//        this.totalPrice = totalPrice;
+//        this.payment = payment;
+//    }
 
     public void addOrderLine(Product product, int quantity) {
         OrderLine orderLine = new OrderLine(product, quantity);

@@ -33,4 +33,7 @@ public class Payment {
         this.date = date;
         this.amount = amount;
     }
+
+    public Payment(Double amount) {
+    }
 }
