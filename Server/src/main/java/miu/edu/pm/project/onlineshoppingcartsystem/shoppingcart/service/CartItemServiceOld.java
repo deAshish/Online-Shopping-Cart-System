@@ -18,7 +18,8 @@
 //    CartItemRepo cartItemRepo;
 //
 //    public void addProduct(Product product, Long customerId) {
-//        Customer customer = null; //customerRepo.get(customerId); TODO find customer by id
+//        Customer customer = null;
+//        //customerRepo.get(customerId); TODO find customer by id
 //        CartItems cart = cartItemRepo.findByCustomer(customer);
 //
 //        CartItem_Old cartItem = null;

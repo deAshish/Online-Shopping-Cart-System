@@ -1,5 +1,7 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.service;
 
+import miu.edu.pm.project.onlineshoppingcartsystem.product.domain.Product;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductAdapter;
 import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductDto;
 import miu.edu.pm.project.onlineshoppingcartsystem.product.service.ProductService;
 import miu.edu.pm.project.onlineshoppingcartsystem.shoppingcart.domain.CartItems;
@@ -23,14 +25,17 @@ public class CartItemService {
     private CustomerService customerService;
 
 
-    public List<CartItems> getCartItemsByUserId(Long userId) {
+
+
+    public List<CartItems> getCartItemsByCustomerId(Long userId) {
         return cartItemRepo.findByCustomerId(userId);
     }
 
 
     public void addToCart(Long userId, Long productId, Integer quantity) {
         Customer customer = customerService.getCustomerById(userId);
-        ProductDto product = productService.getProductById(productId);
+        ProductDto productdto = productService.getProductById(productId);
+        Product product = ProductAdapter.productFromDTO(productdto);
 
 
 //            if (product == null) {
@@ -38,7 +43,7 @@ public class CartItemService {
 //            }
 
 
-        List<CartItems> cartItems = (List<CartItems>) cartItemRepo.findByCustomerIdAndProductId(userId, productId);
+        List<CartItems> cartItems = cartItemRepo.findByCustomerIdAndProductId(userId, productId);
         if (!cartItems.isEmpty()) {
             CartItems cartItem = cartItems.get(0);
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
@@ -63,5 +68,8 @@ public class CartItemService {
         cartItem.setQuantity(quantity);
         cartItemRepo.save(cartItem);
     }
+
+
+
 }
-}
+
