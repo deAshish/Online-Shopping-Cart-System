@@ -1,21 +1,25 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.product.service;
 
-// ProductService.java - Service Interface
+import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductRequest;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductSearchDto;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.model.Product;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.model.ProductStatus;
+import miu.edu.pm.project.onlineshoppingcartsystem.user.model.User;
+import net.sf.jasperreports.engine.JRException;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
-import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.PageableResponse;
-import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductDto;
-
 public interface ProductService {
-    ProductDto createProduct(ProductDto productDto);
-    ProductDto updateProduct(Long productId, ProductDto productDto);
-    void deleteProductById(Long productId);
-    ProductDto getProductById(Long productId);
-    PageableResponse<ProductDto> getAllProducts(int pageNumber, int pageSize, String sortBy, String sortDir);
+    List<Product> findAll();
+    List<Product> findAllStatus(ProductStatus status);
+    List<Product> findAllByVendor(User vendor);
+    List<Product> searchProductAdvanced(ProductSearchDto productSearchDto);
+    Product save(ProductRequest product, User user);
+    Product update(long id, ProductRequest product, User user);
+    boolean delete(long id);
 
-    PageableResponse<ProductDto> searchProductByName(String name, int pageNumber, int pageSize, String sortBy, String sortDir);
+    public String exportReport(String reportFormat) throws FileNotFoundException, JRException;
 
+    List<Product> searchProducts(String query);
 }
-
-
