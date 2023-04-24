@@ -1,12 +1,13 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.order.repository;
 
-import miu.edu.pm.project.onlineshoppingcartsystem.order.domain.Orders;
+
+import miu.edu.pm.project.onlineshoppingcartsystem.order.model.OrderCart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import javax.transaction.Transactional;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Orders, Long> {
-    List<Orders> findByCustomer_Id(Long customerId);
+@Transactional
+public interface OrderRepository extends JpaRepository<OrderCart, Long> {
 }

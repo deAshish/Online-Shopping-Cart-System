@@ -1,61 +1,44 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.order.controller;
 
-import miu.edu.pm.project.onlineshoppingcartsystem.order.domain.Orders;
-import miu.edu.pm.project.onlineshoppingcartsystem.order.service.impl.OrderService;
+import miu.edu.pm.project.onlineshoppingcartsystem.order.dto.OrderRequest;
+import miu.edu.pm.project.onlineshoppingcartsystem.order.repository.OrderRepository;
+import miu.edu.pm.project.onlineshoppingcartsystem.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/order")
+@PreAuthorize("hasAuthority('CUSTOMER') || hasAuthority('CLIENT')")
 public class OrderController {
-
     @Autowired
-    OrderService orderService;
+    OrderRepository orderRepository;
+    @Autowired
+    private OrderService orderService;
 
-    @PostMapping
-    public ResponseEntity<Orders> createOrder(@RequestBody Orders orders) {
-        Orders createdOrders = orderService.createOrder(orders);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrders);
+    @GetMapping()
+    public ResponseEntity<?> searchProduct() {
+        return ResponseEntity.ok().body(orderRepository.findAll());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Orders> updateOrder(@PathVariable Long id, @RequestBody Orders orders) {
-        Orders updatedOrders = orderService.updateOrder(orders);
-        return ResponseEntity.ok(updatedOrders);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
-        orderService.deleteOrder(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Orders> getOrderById(@PathVariable Long id) {
-        Orders orders = orderService.getOrderById(id);
-        if (orders == null) {
-            return ResponseEntity.notFound().build();
+    @PostMapping("/create")
+    public ResponseEntity<?> newOrder(@RequestBody OrderRequest order) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(orderService.save(order));
+        } catch (RuntimeException exception) {
+            return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(exception.getMessage());
         }
-        return ResponseEntity.ok(orders);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Orders>> getAllOrders() {
-        List<Orders> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
+    @GetMapping("/show/{id}")
+    public ResponseEntity<?> showOrder(@PathVariable long id) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderRepository.findById(id));
     }
 
-    @GetMapping("/customer/{customerId}")
-    public ResponseEntity<List<Orders>> getOrdersByCustomerId(@PathVariable Long customerId) {
-        List<Orders> orders = orderService.getOrdersByCustomerId(customerId);
-        return ResponseEntity.ok(orders);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateOrder(@PathVariable long id, @RequestBody OrderRequest order) {
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.update(id, order));
     }
-
 }
-
