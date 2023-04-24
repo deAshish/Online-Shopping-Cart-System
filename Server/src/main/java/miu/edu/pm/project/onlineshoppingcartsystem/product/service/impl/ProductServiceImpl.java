@@ -1,85 +1,204 @@
 package miu.edu.pm.project.onlineshoppingcartsystem.product.service.impl;
 
-// ProductServiceImpl.java - Service Implementation
-
-import miu.edu.pm.project.onlineshoppingcartsystem.exception.ResourceNotFoundException;
-import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductDto;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import miu.edu.pm.project.onlineshoppingcartsystem.product.service.ProductService;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductRequest;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.dto.ProductSearchDto;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.model.Product;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.model.ProductStatus;
 import miu.edu.pm.project.onlineshoppingcartsystem.product.repository.ProductRepository;
-import miu.edu.pm.project.onlineshoppingcartsystem.product.domain.Product;
-import java.util.List;
-import java.util.stream.Collectors;
+import miu.edu.pm.project.onlineshoppingcartsystem.product.service.ProductService;
+import miu.edu.pm.project.onlineshoppingcartsystem.productCategory.model.Category;
+import miu.edu.pm.project.onlineshoppingcartsystem.productCategory.repository.CategoryRepository;
+import miu.edu.pm.project.onlineshoppingcartsystem.report.model.ProductReport;
+import miu.edu.pm.project.onlineshoppingcartsystem.user.model.User;
+import miu.edu.pm.project.onlineshoppingcartsystem.user.repository.UserRepository;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 
+import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
+    @Autowired
+    public ProductRepository productRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    public UserRepository vendorRepository;
 
     @Autowired
-    private ModelMapper modelMapper; // You can use a library like ModelMapper for mapping between entities and DTOs
+    public CategoryRepository categoryRepository;
 
     @Override
-    public ProductDto createProduct(ProductDto productDto) {
-        // Map ProductDto to Product entity
-        Product product = modelMapper.map(productDto, Product.class);
-        Product savedProduct = productRepository.save(product);
-        // Map the saved Product entity back to ProductDto and return
-        return modelMapper.map(savedProduct, ProductDto.class);
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
     @Override
-    public ProductDto updateProduct(Long productId, ProductDto productDto) {
-        // Retrieve the existing Product entity from the repository
-        Product existingProduct = productRepository.findById(productId)
-                .orElseThrow(ResourceNotFoundException::new);
-
-        // Update the fields of the existing Product entity with the values from the ProductDto
-        existingProduct.setName(productDto.getName());
-        existingProduct.setPrice(productDto.getPrice());
-        existingProduct.setQuantity(productDto.getQuantity());
-        // Save the updated Product entity
-        Product savedProduct = productRepository.save(existingProduct);
-        // Map the saved Product entity back to ProductDto and return
-        return modelMapper.map(savedProduct, ProductDto.class);
+    public List<Product> findAllStatus(ProductStatus status) {
+        return productRepository.findAllStatus(status);
     }
 
     @Override
-    public void deleteProductById(Long productId) {
-        // Delete the Product entity from the repository
-        productRepository.deleteById(productId);
+    public List<Product> findAllByVendor(User vendor) {
+        return productRepository.findAllByVendor(vendor);
+    }
+
+
+    @Override
+    public List<Product> searchProductAdvanced(ProductSearchDto productSearchDto) {
+        User vendor;
+        Category category;
+        //color vendor category*
+        if (productSearchDto.getIdVendor() != 0 &&
+                productSearchDto.getIdCategory() != 0 &&
+                productSearchDto.getColor() != "") {
+            vendor = vendorRepository.findById(productSearchDto.getIdVendor())
+                    .orElseThrow(() -> new ResourceNotFoundException("vendor doesn't exist "));
+            category = categoryRepository.findById(productSearchDto.getIdCategory())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category doesn't exist with id "));
+            Collection<Product> test = productRepository.searchProductAdvanced(productSearchDto.getStatus(), productSearchDto.getName(), productSearchDto.getColor(), vendor, category);
+            return productRepository.searchProductAdvanced(productSearchDto.getStatus(), productSearchDto.getName(), productSearchDto.getColor(), vendor, category);
+            //vendor category*
+        } else if (productSearchDto.getIdVendor() != 0 &&
+                productSearchDto.getIdCategory() != 0 &&
+                productSearchDto.getColor() == "") {
+            vendor = vendorRepository.findById(productSearchDto.getIdVendor())
+                    .orElseThrow(() -> new ResourceNotFoundException("vendor doesn't exist "));
+            category = categoryRepository.findById(productSearchDto.getIdCategory())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category doesn't exist with id "));
+            return productRepository.searchProductAdvanced(productSearchDto.getStatus(), productSearchDto.getName(), vendor, category);
+            //vendor color*
+        } else if (productSearchDto.getIdVendor() != 0 &&
+                productSearchDto.getIdCategory() == 0 &&
+                productSearchDto.getColor() != "") {
+            vendor = vendorRepository.findById(productSearchDto.getIdVendor())
+                    .orElseThrow(() -> new ResourceNotFoundException("vendor doesn't exist "));
+            return productRepository.searchProductAdvanced(productSearchDto.getStatus(), productSearchDto.getName(), productSearchDto.getColor(), vendor);
+        }
+        // category color*
+        else if (productSearchDto.getIdVendor() == 0 &&
+                productSearchDto.getIdCategory() != 0 &&
+                productSearchDto.getColor() != "") {
+            category = categoryRepository.findById(productSearchDto.getIdCategory())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category doesn't exist with id "));
+            return productRepository.searchProductAdvanced(productSearchDto.getStatus(), productSearchDto.getName(), productSearchDto.getColor(), category);
+            //color*
+        } else if (productSearchDto.getIdVendor() == 0 &&
+                productSearchDto.getIdCategory() == 0 &&
+                productSearchDto.getColor() != "") {
+            return productRepository.searchProductAdvanced(productSearchDto.getStatus(), productSearchDto.getName(), productSearchDto.getColor());
+            //category
+        } else if (productSearchDto.getIdVendor() == 0 &&
+                productSearchDto.getIdCategory() != 0 &&
+                productSearchDto.getColor() == "") {
+            category = categoryRepository.findById(productSearchDto.getIdCategory())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category doesn't exist with id "));
+            System.out.println(category.getName());
+            return productRepository.searchProductAdvanced(productSearchDto.getStatus(), productSearchDto.getName(), category);
+            //vendor
+        } else if (productSearchDto.getIdVendor() != 0 &&
+                productSearchDto.getIdCategory() == 0 &&
+                productSearchDto.getColor() == "") {
+            vendor = vendorRepository.findById(productSearchDto.getIdVendor())
+                    .orElseThrow(() -> new ResourceNotFoundException("vendor doesn't exist "));
+            return productRepository.searchProductAdvanced(productSearchDto.getStatus(), productSearchDto.getName(), vendor);
+        }
+            return productRepository.searchProductAdvanced(productSearchDto.getStatus(), productSearchDto.getName());
+
     }
 
     @Override
-    public ProductDto getProductById(Long productId) {
-        // Retrieve the Product entity from the repository
-        Product product = productRepository.findById(productId)
-                .orElseThrow(ResourceNotFoundException::new);
-        // Map the Product entity to ProductDto and return
-        return modelMapper.map(product, ProductDto.class);
+    public Product save(ProductRequest newProduct, User user) {
+
+        Category category = categoryRepository.findById(newProduct.getIdCategory())
+                .orElseThrow(() -> new ResourceNotFoundException("Category doesn't exist with id :" + newProduct.getIdCategory()));
+        System.out.println("### CAT " + category.getName());
+        Product product = new Product(newProduct.getName(),
+                newProduct.getColor(),
+                user,
+                ProductStatus.NOTAPPROVED,
+                newProduct.getQuantity(),
+                category,
+                newProduct.getPrice());
+        return productRepository.save(product);
     }
 
     @Override
-    public List<ProductDto> getAllProducts() {
-        // Retrieve all Product entities from the repository
-        List<Product> products = productRepository.findAll();
-        // Map the list of Product entities to a list of ProductDto objects and return
-        return products.stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
-                .collect(Collectors.toList());
+    public Product update(long id, ProductRequest editedProduct, User user) {
+        Optional<Product> optionalProduct = Optional.ofNullable(productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product doesn't exist with id :" + id)));
+        Product product = optionalProduct.get();
+        if (optionalProduct.isPresent()) {
+            product.setName(editedProduct.getName());
+            product.setColor(editedProduct.getColor());
+            product.setVendor(user);
+            product.setStatus(editedProduct.getStatus());
+            product.setQuantity(editedProduct.getQuantity());
+            Category category = categoryRepository.findById(editedProduct.getIdCategory())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category doesn't exist with id :" + editedProduct.getIdCategory()));
+            product.setCategory(category);
+            product.setPrice(editedProduct.getPrice());
+
+            product = productRepository.save(product);
+        }
+        return product;
     }
 
     @Override
-    public List<ProductDto> searchProductByName(String string) {
-        List<Product> products = productRepository.findByNameContainingIgnoreCase(string);
-        return products.stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
-                .collect(Collectors.toList());
+    public boolean delete(long id) {
+        Optional<Product> optionalProduct = Optional.ofNullable(productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product doesn't exist with id :" + id)));
+        Product product = optionalProduct.get();
+        if (optionalProduct.isPresent()) {
+            product.setStatus(ProductStatus.DELETED);
+            product = productRepository.save(product);
+            return !productRepository.existsById(id);
+        } else {
+            return false;
+        }
     }
 
+    @Override
+    public List<Product> searchProducts(String query) {
+        if (StringUtils.isEmpty(query)) {
+            return productRepository.findAll();
+        } else {
+            return productRepository.searchProductAdvancedproducts(query);
+        }
+    }
+
+    public String exportReport(String reportFormat) throws FileNotFoundException, JRException {
+        String path = "/Users/temuujintsogt/Desktop/ReportPM/";
+        List<Object[]> productReports = productRepository.findAllProductByVendor();
+        List<ProductReport> finalReports = new ArrayList<ProductReport>();
+
+        for (Object[] obj : productReports) {
+            String userName = (String) obj[0];
+            double totalSales = (Double) obj[1];
+            ProductReport summary = new ProductReport( userName, totalSales);
+            finalReports.add(summary);
+        }
+        //load file and compile it
+        File file = ResourceUtils.getFile("classpath:vendorsalesreports.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(finalReports);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("createdBy", "Binod Kathayat");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        if (reportFormat.equalsIgnoreCase("html")) {
+            JasperExportManager.exportReportToHtmlFile(jasperPrint, path + "vendor_sales_report.html");
+        }
+        if (reportFormat.equalsIgnoreCase("pdf")) {
+            JasperExportManager.exportReportToPdfFile(jasperPrint, path + "vendor_sales_report.pdf");
+        }
+        return "File is downloaded in the following path: " +path;
+    }
 }
-
