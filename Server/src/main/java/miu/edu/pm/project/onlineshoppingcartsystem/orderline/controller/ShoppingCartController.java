@@ -30,13 +30,20 @@ public class ShoppingCartController {
 
     @GetMapping("/getItems")
     List<ItemList> getItems() {
+        // Get logged user info
         UserDetailsImpl userDetail = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        //Get user details from database
         User user = userRepository.findById(userDetail.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found - %d !"));
         return itemListRepository.findByUserAndCreated(user.getId());
     }
 
+    /**
+     * Customer can add item to the shopping cart
+     * @param newItem New item to add shopping cart
+     * @return Returns all items in the shopping cart
+     */
     @PostMapping("/add")
     List<ItemList> add(@RequestBody ItemList newItem) {
         UserDetailsImpl userDetail = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -57,6 +64,7 @@ public class ShoppingCartController {
         User user = userRepository.findById(userDetail.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found - %d !"));
 
+        // Update if item exists, else create it in database
         return itemListRepository.findById(id)
                 .map(item -> {
                     item.setQuantity(itemParam.getQuantity());
